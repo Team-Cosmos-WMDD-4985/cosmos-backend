@@ -13,8 +13,8 @@ await dbConnection();
 
 const app = express();
 
-import awsService from './src/services/aws.service.js';
-await awsService.getObject();
+// import awsService from './src/services/aws.service.js';
+// await awsService.getObject();
 
 app.use(cors());
 app.use(express.json({limit: '50mb'}));

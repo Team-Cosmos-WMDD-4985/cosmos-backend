@@ -41,7 +41,7 @@ const getAllObjects = async () => {
 
 export default {
     putToS3,
-    getObject
+    getAllObjects
 }
 
 

@@ -5,9 +5,16 @@ import http from 'http';
 import cors from 'cors';
 import bodyParser from "body-parser";
 
-import Router from './src/routers/index.js'
+import Router from './src/routers/index.js';
+
+// DB Connection
+import dbConnection from "./src/config/db.js";
+await dbConnection();
 
 const app = express();
+
+import awsService from './src/services/aws.service.js';
+await awsService.getObject();
 
 app.use(cors());
 app.use(express.json({limit: '50mb'}));

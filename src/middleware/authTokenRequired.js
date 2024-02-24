@@ -1,11 +1,8 @@
 import jwt from 'jsonwebtoken'
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
+// import dotenv from 'dotenv';
 const User = mongoose.model('User')
-dotenv.config();
-
-
-
+// dotenv.config();
 
 const authTokenRequired = (req, res, next) => {
     const authorizationHeader = req.headers['authorization'] || req.headers['Authorization'];

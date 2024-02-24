@@ -2,7 +2,7 @@ import express from 'express'
 import mongoose from 'mongoose'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv';
-import User from '../../models/users.js';
+import User from './../models/User.js';
 import bcrypt from 'bcrypt'
 
 

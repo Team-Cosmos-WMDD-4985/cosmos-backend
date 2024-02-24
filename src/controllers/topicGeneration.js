@@ -7,18 +7,19 @@ export const topicGeneration = async (req, res, next) => {
     const splittedDocument = await loadPdf.LoadPDF();
     const vectorStore = await VectorStoreService.saveToVectorStorage(splittedDocument);
 
-    const key = await AwsService.putToS3(vectorStore, true);
-    console.log(key)
+    // const key = await AwsService.putToS3(vectorStore, true);
+    // console.log(key)
     // const directory = "/Users/yinka/Documents/art/OPENAI-PDF-CHATBOT/";
     // await vectorStore.save(directory);
 
-    const question = "";
+    const question = "Give me 15 topics from this  document in json.";
     const response = await VectorStoreService.retrieverQAChain(vectorStore, question);
 
-    console.log(response);
+    console.log(JSON.parse(response.text));
 
     return res.json({
-        sucess: "true"
+        sucess: "true",
+        response
     })
 }
 

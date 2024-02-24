@@ -15,6 +15,9 @@ const courseSchema = new Schema(
       },
     ],
     totalNumberOfWeek: { type: Number, required: true },
+    vectorStoreS3Key: {
+      type: String
+    }
   },
   { timestamps: true }
 );

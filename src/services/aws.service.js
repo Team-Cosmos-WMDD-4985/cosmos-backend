@@ -35,12 +35,14 @@ const getSingleObject = async (key, isVectorStore) => {
         Key: key
     }).promise()
 
+    console.log(response);
     if(isVectorStore) {
         return JSON.parse(response.Body.toString())
     } else {
         return response.Body
     }
 }
+
 export default {
     putToS3,
     getSingleObject

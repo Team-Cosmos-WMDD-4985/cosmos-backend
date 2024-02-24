@@ -14,34 +14,36 @@ const generateRadomName = () => {
     return crypto.randomBytes(32).toString('hex')
 }
 
-const putToS3 = async (content) => {
+const putToS3 = async (content, isVectorStore) => {
+    if(isVectorStore) {
+        content = JSON.stringify(content)
+    }
+    const key = generateRadomName();
     const response = await s3.putObject({
         Body: content,
         Bucket: process.env.AWS_BUCKET,
-        Key: generateRadomName()
+        Key: key
     }).promise();
 
-    console.log(response)
+    console.log(response);
+    return key;
 };
 
-// const getSingleObject = async (key) => {
-//     const response = await s3.getObject({
-//         Bucket:  process.env.AWS_BUCKET,
-//         Key: key
-//     }).promise()
-// }
+const getSingleObject = async (key, isVectorStore) => {
+    const response = await s3.getObject({
+        Bucket:  process.env.AWS_BUCKET,
+        Key: key
+    }).promise()
 
-const getAllObjects = async () => {
-    const response = await s3.listObjectsV2({
-        Bucket: process.env.AWS_BUCKET
-    }).promise();
-
-    console.log(response)
+    if(isVectorStore) {
+        return JSON.parse(response.Body.toString())
+    } else {
+        return response.Body
+    }
 }
-
 export default {
     putToS3,
-    getAllObjects
+    getSingleObject
 }
 
 

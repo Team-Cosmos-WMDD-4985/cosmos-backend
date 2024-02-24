@@ -10,7 +10,6 @@ const LoadPDF = async () => {
     const loader = new PDFLoader("src/documents/tutorial.pdf");
     const docs = await loader.load();
 
-
     const splitter = new RecursiveCharacterTextSplitter({
         chunkSize: 1000,
         chunkOverlap: 20,

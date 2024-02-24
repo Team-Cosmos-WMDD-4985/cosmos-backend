@@ -1,9 +1,6 @@
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { OpenAIEmbeddings, OpenAI } from "@langchain/openai";
 import { RetrievalQAChain } from "langchain/chains";
-import { FaissStore } from "langchain/vectorstores/faiss";
-// import { OpenAIEmbeddings } from "langchain/embeddings/openai";
-// import { loadQAStuffChain, loadQAMapReduceChain } from "langchain/chains";
 
 export default {
     saveToVectorStorage : async (docs) => {
@@ -11,8 +8,6 @@ export default {
             docs,
             new OpenAIEmbeddings()
         )
-
-    
     
         return vectorStorage;
     },

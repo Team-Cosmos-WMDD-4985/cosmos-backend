@@ -13,10 +13,7 @@ router.get("/test", (req, res)=> {
 // router.get("/gets3", fetchS3Object);
 router.post("/addCourse", TopicGenerationController.addCourse);
 router.post("/generateTopics", TopicGenerationController.topicGeneration);
-<<<<<<< HEAD
 router.post("/generateQuiz", TopicGenerationController.QuizGeneration )
-=======
->>>>>>> develop
 router.use(authRoute);
 
 

@@ -5,9 +5,7 @@ import dotenv from 'dotenv';
 import User from './../models/User.js';
 import bcrypt from 'bcrypt'
 
-
 dotenv.config();
-
 
 const router = express.Router()
 router.post("/signup", (req, res) => {

@@ -13,6 +13,7 @@ router.get("/test", (req, res)=> {
 // router.get("/gets3", fetchS3Object);
 router.post("/addCourse", TopicGenerationController.addCourse);
 router.post("/generateTopics", TopicGenerationController.topicGeneration);
+router.post("/generateQuiz", TopicGenerationController.QuizGeneration )
 router.use(authRoute);
 
 

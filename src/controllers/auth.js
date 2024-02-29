@@ -9,7 +9,7 @@ export default {
     signup: async(req, res, next) => {
 
         const { name, email, password, dob } = req.body;
-        if (!name || !email || !password || !dob) {
+        if (!name || !email || !password ) {
             return res.status(422).send({ error: 'Please fill out all the missing fields' });
         }
         User.findOne({ email: email }).then(async (savedUser) => {

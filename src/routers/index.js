@@ -14,7 +14,7 @@ router.get("/test", (req, res)=> {
 router.post("/addCourse", TopicGenerationController.addCourse);
 router.post("/generateTopics", TopicGenerationController.topicGeneration);
 router.post("/generateQuiz", TopicGenerationController.QuizGeneration )
-router.use(authRoute);
+router.use("/auth" ,authRoute);
 
 
 export default router;

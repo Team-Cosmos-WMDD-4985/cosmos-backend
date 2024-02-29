@@ -42,7 +42,6 @@ export const addCourse = async (req, res, next) => {
     } catch (err) {
         next(err);
     }
-<<<<<<< HEAD
 }
 
 export const QuizGeneration = async (req, res, next) => {
@@ -50,6 +49,4 @@ export const QuizGeneration = async (req, res, next) => {
     return res.json({
         data
     })
-=======
->>>>>>> develop
 }

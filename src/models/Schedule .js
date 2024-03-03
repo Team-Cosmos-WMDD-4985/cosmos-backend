@@ -4,8 +4,19 @@ const { Schema } = mongoose;
 
 const scheduleSchema = new Schema(
   {
-    courseId: { type: Schema.Types.ObjectId, ref: "Course" },
-    numberOfWeek: { type: Number, required: true },
+    courseId: { 
+      type: Schema.Types.ObjectId, 
+      ref: "Course" 
+    },
+    // numberOfWeek: { type: Number, required: true },
+    schedule: [
+      {
+        weekName: {
+          type: String,
+        },
+        topics: [String]
+      }
+    ],
     topicName: { type: String, required: true },
     outlines: [
       {

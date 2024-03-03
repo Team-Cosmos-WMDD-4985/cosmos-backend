@@ -5,24 +5,25 @@ AWS.config.credentials ={
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 }
+
 AWS.config.update({
     region: process.env.AWS_REGION
 });
 const s3 = new AWS.S3()
-
 const generateRadomName = () => {
     return crypto.randomBytes(32).toString('hex')
 }
 
-const putToS3 = async (content, isVectorStore) => {
-    if(isVectorStore) {
-        content = JSON.stringify(content)
+const putToS3 = async (file, isVectorStore) => {
+    if(!isVectorStore) {
+        file = file.buffer;
     }
     const key = generateRadomName();
     const response = await s3.putObject({
-        Body: content,
+        Body: file,
         Bucket: process.env.AWS_BUCKET,
-        Key: key
+        Key: key,
+        ContentType: file.mimetype ?  file.mimetype : ""
     }).promise();
 
     console.log(response);

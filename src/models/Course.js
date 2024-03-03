@@ -4,20 +4,46 @@ const { Schema } = mongoose;
 
 const courseSchema = new Schema(
   {
-    userId: { type: Schema.Types.ObjectId, ref: "User" },
-    courseName: { type: String, required: true },
-    startDate: { type: Date, required: true },
-    endDate: { type: Date, required: true },
+    userId: { 
+      type: Schema.Types.ObjectId, 
+      ref: "User" 
+    },
+    courseName: { 
+      type: String, 
+      required: true 
+    },
+    startDate: { 
+      type: Date, 
+      required: true 
+    },
+    endDate: { 
+      type: Date, 
+      required: true 
+    },
     topics: [
       {
         topicName: String,
         level: { type: String, enum: ["low", "medium", "advance"] },
       },
     ],
-    totalNumberOfWeek: { type: Number, required: true },
+    totalNumberOfWeek: { 
+      type: Number, 
+      required: true 
+    },
+    pdfFileS3Key: {
+      type: String
+    },
     vectorStoreS3Key: {
       type: String
-    }
+    },
+    schedule: [
+      {
+        weekName: {
+          type: String,
+        },
+        topics: [String]
+      }
+    ],
   },
   { timestamps: true }
 );

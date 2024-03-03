@@ -11,7 +11,7 @@ const authTokenRequired = (req, res, next) => {
         return res.status(401).send({error:"You must log in key not given"})
     }
     const token = authorizationHeader.replace("Bearer ", "")
-    console.log(token)
+    // console.log(token)
     jwt.verify(token, process.env.JWT_SECRET, (err, payload) => {
         if (err) {
             return res.status(401).send({error:'you must be loged in , token error'})

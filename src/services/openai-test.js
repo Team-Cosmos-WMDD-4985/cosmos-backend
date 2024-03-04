@@ -1,6 +1,6 @@
 import * as OpenAI from "openai";
-import dotenv from 'dotenv';
-dotenv.config();
+// import dotenv from 'dotenv';
+// dotenv.config();
 
 const openai = new OpenAI.default({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -27,10 +27,12 @@ async function generateQuizQuestion(topic) {
 
     quizList.push(completion.choices[0])
     console.log(quizList)
+    return quizList;
   } catch (error) {
     console.error("Error generating quiz question:", error);
   }
 }
 
 const topic = "history, geography, maths";
-generateQuizQuestion(topic);
+// generateQuizQuestion(topic);
+export default generateQuizQuestion;

@@ -15,7 +15,8 @@ router.get("/test", (req, res)=> {
 });
 
 router.get("/gets3", TopicGenerationController.topicGeneration);
-router.post("/addCourse", AuthMiddleware, upload.single('file'),  TopicGenerationController.addCourse);
+router.get("/courses", AuthMiddleware, TopicGenerationController.getCourses )
+router.post("/addCourse",AuthMiddleware, upload.single('file'), TopicGenerationController.addCourse);
 router.post("/generateTopics", TopicGenerationController.topicGeneration);
 router.post("/generateQuiz", TopicGenerationController.QuizGeneration )
 router.use("/auth" ,authRoute);

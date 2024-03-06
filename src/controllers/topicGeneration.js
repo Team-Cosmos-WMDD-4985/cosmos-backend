@@ -27,7 +27,7 @@ const makeScheduleObject = (data) => {
         for(let i = 0; i < data.schedule.length; i++) {
             let obj = {
                 weekName: `${i + 1}`,
-                topics: data.schedule[0].topics
+                topics: data.schedule[i].topics
             }
             finalData.push(obj);
         }
@@ -93,9 +93,31 @@ export const fetchS3Object = async (req, res, next) => {
     })
 }
 
+export const getCourses = async ( req, res, next ) => {
+    try {
+        const userId = req.user._id;
+        const courses = await CourseM.find({ userId : userId }).select('_id courseName startDate endDate s3ImageUrl')
+        return res.json({
+            success: true,
+            data: {
+                courses
+            }
+        })
+    } catch (err) {
+        next(err)
+    }
+}
+
 export const addCourse = async (req, res, next) => {
     try {
-
+        console.log(req.body)
+        if(req.body.startDate) {
+            req.body.startDate = (new Date(req.body.startDate)).getTime()
+        }
+        if(req.body.endDate) {
+            req.body.endDate = (new Date(req.body.endDate)).getTime()
+        }
+        console.log(req.body)
         const validate = await JoiServices.validateBodyAsync(courseSchema, req.body)
 
         const userId = req.user._id

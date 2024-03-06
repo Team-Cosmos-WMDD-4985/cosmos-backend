@@ -28,6 +28,9 @@ const courseSchema = new Schema(
     pdfFileS3Key: {
       type: String
     },
+    s3ImageUrl: {
+      type: String
+    },
     vectorStoreS3Key: {
       type: String
     },

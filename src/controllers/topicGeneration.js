@@ -9,6 +9,8 @@ import CourseM from "./../models/Course.js"
 import multer from "../services/multer.js";
 import JoiServices from "../services/JoiServices.js";
 import * as OpenAI2 from "openai";
+import { generateSchedule } from "./../services/openai-test.js";
+
 const openai2 = new OpenAI2.default({ apiKey: process.env.OPENAI_API_KEY, });
 
 const courseSchema = Joi.object().keys({
@@ -19,6 +21,22 @@ const courseSchema = Joi.object().keys({
     profileImage: Joi.any().optional()
 });
 
+const makeScheduleObject = (data) => {
+    let finalData = [];
+    if(data.schedule) {
+        for(let i = 0; i < data.schedule.length; i++) {
+            let obj = {
+                weekName: `${i + 1}`,
+                topics: data.schedule[0].topics
+            }
+            finalData.push(obj);
+        }
+
+    }
+    return finalData;
+    
+}
+
 export const topicGeneration = async (req, res, next) => {
 
 
@@ -27,9 +45,9 @@ export const topicGeneration = async (req, res, next) => {
     const vectorStorage = new MemoryVectorStore(new OpenAIEmbeddings());
     vectorStorage.memoryVectors = serializedData.memoryVectors;
 
-    const question = "What is the defination of variables? ";
+    const question = "Give me 15 topics from this  document in json ";
     const response = await VectorStoreService.retrieverQAChain(vectorStorage, question);
-    // console.log(JSON.parse());
+    console.log(JSON.parse());
     // const schedule 
     
     // if(response.text) {
@@ -84,15 +102,24 @@ export const addCourse = async (req, res, next) => {
         const file = req.file;
         const path = req.file.path
 
-        const startDate = new Date(req.body.startDate);
-        const endData = new Date(req.body.endData);
-        const difference = end - start;
+        let startD = req.body.startDate;
+        let endD  = req.body.endDate;
+
+        if (typeof startD === "string") {
+            startD = parseInt(startD)
+        }
+
+        if(typeof endD === "string") (
+            endD = parseInt(endD)
+        )
+        const startDate = new Date(startD);
+        const endData = new Date(endD);
+        const difference = endData - startDate;
         const days = Math.ceil(difference / (1000 * 60 * 60 * 24));
         const weeks = Math.ceil(days/7);
 
         const splittedDocument = await loadPdf.LoadPDF(req.file.path);
-        // const question = "Give me 15 topics from this  document in json.";
-        const question = `Divide the whole book into 25 topics and then divide into 7 weeks. Response should be like { week1 : { topics : []} } and so on in json.`;
+        const question = "Give me 15 topics from this  document in json.";
         const vectorStore = await VectorStoreService.saveToVectorStorage(splittedDocument);
         const response = await VectorStoreService.retrieverQAChain(vectorStore, question);
         
@@ -100,33 +127,65 @@ export const addCourse = async (req, res, next) => {
             memoryVectors: vectorStore.memoryVectors,
         });
 
+        let topics;
+        console.log(response.text)
+        try {
+            topics = JSON.parse(response.text);
+        } catch (err) {
+            topics = `Create any 15 topics based on ${req.body.name} course `
+        }
+
+        if (topics.topics) {
+            topics = topics.topics
+        } else if (topics.Topics) {
+            topics = topics.Topics
+        }
+        console.log(topics);
+
+        const schedule = await generateSchedule(JSON.stringify(topics), weeks);
+        const finalScheduleFormat = makeScheduleObject( JSON.parse(schedule));
         const vectoreStoreKey = await AwsService.putToS3(serializedData, true);
 
-        const data = new CourseM({
-            name: req.body.name,
+        const courseData = await new CourseM({
+            courseName: req.body.name,
             userId: userId,
             startDate: req.body.startDate,
             endDate: req.body.endDate,
-            topics: [],
+            topics: topics,
             vectorStoreS3Key: vectoreStoreKey,
-            totalNumberOfWeek: weeks
+            totalNumberOfWeek: weeks,
+            schedule: finalScheduleFormat
         }).save();
 
         // delete file;
         multer.deleteFile(path);
         return res.json({
             sucess: true,
-            data: {
-                schedule: JSON.parse(response.text),
-                vectoreStoreKey: vectoreStoreKey,
-                courseAdded: data
-            }
+            data: finalScheduleFormat
         })
 
 
     } catch (err) {
         next(err);
     }
+}
+
+export const updateCouse = async (req, res, next) => {
+
+    try {
+
+        const courseId = req.body.couseId;
+
+        const updatedData = await CourseM.findByIdAndUpdate(courseId, {...req.body})
+
+        return res.json({
+            updatedData
+        })
+
+    } catch (err) {
+        next (err)
+    }
+    
 }
 
 export const QuizGeneration = async (req, res, next) => {

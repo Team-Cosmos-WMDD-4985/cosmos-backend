@@ -13,19 +13,14 @@ const courseSchema = new Schema(
       required: true 
     },
     startDate: { 
-      type: Date, 
+      type: Number, 
       required: true 
     },
     endDate: { 
-      type: Date, 
+      type: Number, 
       required: true 
     },
-    topics: [
-      {
-        topicName: String,
-        level: { type: String, enum: ["low", "medium", "advance"] },
-      },
-    ],
+    topics: [String],
     totalNumberOfWeek: { 
       type: Number, 
       required: true 

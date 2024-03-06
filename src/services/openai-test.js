@@ -1,8 +1,8 @@
-import * as OpenAI from "openai";
-// import dotenv from 'dotenv';
-// dotenv.config();
+import OpenAI from "openai";
 
-const openai = new OpenAI.default({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAI({ 
+  apiKey: process.env.OPENAI_API_KEY 
+});
 
 const quizList = []
 
@@ -33,6 +33,36 @@ async function generateQuizQuestion(topic) {
   }
 }
 
+const generateSchedule = async (topics, weeks) => {
+
+  console.log(topics)
+  const question2 = `${topics}.  Given a list of topics separated by commas, your task is to distribute these topics evenly over a period of ${weeks} weeks, creating a weekly schedule. Each week should contain a portion of the total topics, with the aim of evenly distributing them throughout the ${weeks} weeks. You can split one topics to as many small topics, but make sure that all the weeks get at least 2 topics and one topic occur in once only in the whole schedule. The final output should be organized in JSON format, with each week labeled (week1, week2, ..., week7) and associated with an array of topics for that week. The JSON structure should follow this pattern:
+       schedule: { [
+          {
+            week: "1",
+            topics : ["topic1", "topic2"],
+          },
+          {
+            week : "2",
+            topics: ["topic3","topic4"]
+          }
+        ]
+
+      }
+        `
+
+  const completion = await openai.chat.completions.create({
+    messages: [{ role: "user", content: question2 }],
+    model: "gpt-3.5-turbo",
+  });
+
+  return completion.choices[0].message.content
+}
+
 const topic = "history, geography, maths";
 // generateQuizQuestion(topic);
 export default generateQuizQuestion;
+
+export {
+  generateSchedule
+}

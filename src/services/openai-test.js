@@ -1,4 +1,6 @@
 import OpenAI from "openai";
+// import * as OpenAI from "openai";
+import Quiz from '../models/Quiz.js'
 
 const openai = new OpenAI({ 
   apiKey: process.env.OPENAI_API_KEY 
@@ -8,25 +10,38 @@ const quizList = []
 
 async function generateQuizQuestion(topic) {
   try {
-    const prompt = `Generate a quiz of 5 question with four options related to ${topic} in html tag.
-        <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike"> 
-        <label for="vehicle3">Option A: </label><br><br>
-        <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike"> 
-        <label for="vehicle3">Option B: </label><br><br>
-        <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike"> 
-        <label for="vehicle3">Option C: </label><br><br>
-        <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike"> 
-        <label for="vehicle3">Option D: </label><br><br>
-        Specify the correct answer.`;
+    const prompt = `"Generate a 10 question quiz in JSON format for a basic programming course. The quiz should have a unique identifier for the course with objectId 12 bytes identifier, a name, a total number of questions, and an array of questions. Each question must include the question text, a type (e.g., multiple-choice, true/false), a set of options where applicable (each with a value and a boolean indicating if it's the correct answer), and the correct answer text. The quiz should cover fundamental concepts like variables, control structures, and basic data types. Ensure the structure matches the following mongoose schema:
 
+    courseId (referencing 'Course')
+    quizName (string, required)
+    totalQuestion (number)
+    questions (array) with fields:
+    question (string, required)
+    questionType (string)
+    options (array) with fields:
+    optionValue (string)
+    isTrue (boolean)
+    answer (string, required)
+    Please format the output in JSON."
+    
+    
+    `;
+
+    
 
     const completion = await openai.chat.completions.create({
       messages: [{ role: "system", content: prompt }],
       model: "gpt-3.5-turbo",
     });
 
+     const generatedText = completion.choices[0].message.content;
+    const generatedQuiz = JSON.parse(generatedText);
+
+    const quiz = new Quiz(generatedQuiz);
+    await quiz.save();
+
     quizList.push(completion.choices[0])
-    console.log(quizList)
+    console.log(generatedQuiz)
     return quizList;
   } catch (error) {
     console.error("Error generating quiz question:", error);

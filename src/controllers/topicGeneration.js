@@ -21,6 +21,22 @@ const courseSchema = Joi.object().keys({
     profileImage: Joi.any().optional()
 });
 
+const makeScheduleObject = (data) => {
+    let finalData = [];
+    if(data.schedule) {
+        for(let i = 0; i < data.schedule.length; i++) {
+            let obj = {
+                weekName: `${i + 1}`,
+                topics: data.schedule[0].topics
+            }
+            finalData.push(obj);
+        }
+
+    }
+    return finalData;
+    
+}
+
 export const topicGeneration = async (req, res, next) => {
 
 
@@ -127,6 +143,7 @@ export const addCourse = async (req, res, next) => {
         console.log(topics);
 
         const schedule = await generateSchedule(JSON.stringify(topics), weeks);
+        const finalScheduleFormat = makeScheduleObject( JSON.parse(schedule));
         const vectoreStoreKey = await AwsService.putToS3(serializedData, true);
 
         const courseData = await new CourseM({
@@ -136,15 +153,15 @@ export const addCourse = async (req, res, next) => {
             endDate: req.body.endDate,
             topics: topics,
             vectorStoreS3Key: vectoreStoreKey,
-            totalNumberOfWeek: weeks
+            totalNumberOfWeek: weeks,
+            schedule: finalScheduleFormat
         }).save();
 
         // delete file;
         multer.deleteFile(path);
         return res.json({
             sucess: true,
-            data: JSON.parse(schedule),
-            courseData: courseData
+            data: finalScheduleFormat
         })
 
 

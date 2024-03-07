@@ -11,7 +11,7 @@ export const getCourse = async (req, res) => {
 
     try {
         const courses = await Course.find({ userId: userId });
-        // console.log(courses); 
+        
         const topicNames = courses.flatMap(course => course.topics.map(topic => topic.topicName));
         for (const topicName of topicNames) {
             await generateQuizQuestion(topicName);

@@ -6,11 +6,14 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY 
 });
 
+
 const quizList = []
 
-async function generateQuizQuestion(topic) {
+
+async function generateQuizQuestion() {
+  const topic = "history, geography, maths";
   try {
-    const prompt = `"Generate a 10 question quiz in JSON format for a basic programming course. The quiz should have a unique identifier for the course with objectId 12 bytes identifier, a name, a total number of questions, and an array of questions. Each question must include the question text, a type (e.g., multiple-choice, true/false), a set of options where applicable (each with a value and a boolean indicating if it's the correct answer), and the correct answer text. The quiz should cover fundamental concepts like variables, control structures, and basic data types. Ensure the structure matches the following mongoose schema:
+    const prompt = `"Generate a 30 question quiz about  in JSON format for a basic programming course. The quiz should have a unique identifier for the course with objectId 12 bytes identifier, a name, a total number of questions, and an array of questions. Each question must include the question text, a type (e.g., multiple-choice, true/false), a set of options where applicable (each with a value and a boolean indicating if it's the correct answer), and the correct answer text. The quiz should cover fundamental concepts like ${topic}. Ensure the structure matches the following mongoose schema:
 
     courseId (referencing 'Course')
     quizName (string, required)
@@ -74,7 +77,8 @@ const generateSchedule = async (topics, weeks) => {
   return completion.choices[0].message.content
 }
 
-const topic = "history, geography, maths";
+
+
 // generateQuizQuestion(topic);
 export default generateQuizQuestion;
 

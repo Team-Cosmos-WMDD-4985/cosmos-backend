@@ -2,6 +2,7 @@ import express from "express";
 import multer, { memoryStorage } from "multer";
 import authRoute from "./authRoutes.js";
 import * as TopicGenerationController from "../controllers/topicGeneration.js";
+import * as getQuiz from "../controllers/generateQuiz.js";
 import multerConfig from "./../services/multer.js";
 import AuthMiddleware from "./../middleware/authTokenRequired.js";
 import * as QuizController from "./../controllers/getQuiz.js";
@@ -24,8 +25,9 @@ router.post(
   TopicGenerationController.addCourse
 );
 router.post("/generateTopics", TopicGenerationController.topicGeneration);
-router.post("/generateQuiz", TopicGenerationController.QuizGeneration);
-router.use("/auth", authRoute);
+router.post("/generateQuiz", TopicGenerationController.QuizGeneration )
+router.get("/getQuiz", getQuiz.getQuiz )
+router.use("/auth" ,authRoute);
 
 router.post("/sendTopics", AuthMiddleware, QuizController.sendTopics);
 

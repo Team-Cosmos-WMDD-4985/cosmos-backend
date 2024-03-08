@@ -96,7 +96,7 @@ export const fetchS3Object = async (req, res, next) => {
 export const getCourses = async ( req, res, next ) => {
     try {
         const userId = req.user._id;
-        const courses = await CourseM.find({ userId : userId }).select('_id courseName startDate endDate s3ImageUrl')
+        const courses = await CourseM.find({ userId : userId }).select('_id courseName startDate endDate s3ImageUrl topics')
         return res.json({
             success: true,
             data: {

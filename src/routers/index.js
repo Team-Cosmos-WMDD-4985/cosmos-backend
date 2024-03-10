@@ -6,6 +6,7 @@ import * as getQuiz from "../controllers/generateQuiz.js";
 import multerConfig from "./../services/multer.js";
 import AuthMiddleware from "./../middleware/authTokenRequired.js";
 import * as QuizController from "./../controllers/getQuiz.js";
+import * as generateQuiz from "../controllers/generateQuiz.js"
 
 const router = express.Router();
 const upload = multer({ storage: multerConfig.multerConfig() });
@@ -26,7 +27,7 @@ router.post(
 );
 router.post("/generateTopics", TopicGenerationController.topicGeneration);
 router.post("/generateQuiz", TopicGenerationController.QuizGeneration )
-router.get("/getQuiz", getQuiz.getQuiz )
+router.get("/getQuiz", generateQuiz.getQuiz )
 router.use("/auth" ,authRoute);
 
 router.post("/sendTopics", AuthMiddleware, QuizController.sendTopics);

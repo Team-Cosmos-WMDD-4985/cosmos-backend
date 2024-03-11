@@ -4,6 +4,10 @@ const { Schema } = mongoose;
 
 const quizSchema = new Schema(
   {
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
     courseId: { type: Schema.Types.ObjectId, ref: "Course" },
     quizName: { type: String, required: true },
     totalQuestion: {

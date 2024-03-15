@@ -17,20 +17,19 @@ router.get("/test", (req, res) => {
   });
 });
 
-//Authentication
+router.get("/gets3", TopicGenerationController.topicGeneration);
+router.get("/courses", AuthMiddleware, TopicGenerationController.getCourses);
+router.post(
+  "/addCourse",
+  AuthMiddleware,
+  upload.single("file"),
+  TopicGenerationController.addCourse
+);
+router.post("/generateTopics", TopicGenerationController.topicGeneration);
+router.post("/generateQuiz", TopicGenerationController.QuizGeneration )
+router.get("/getQuiz/:courseId", generateQuiz.getQuiz )
 router.use("/auth" ,authRoute);
 
-// router.get("/gets3", TopicGenerationController.topicGeneration);
-
-// Courses 
-router.get("/courses", AuthMiddleware, TopicGenerationController.getCourses);
-router.post("/addCourse", AuthMiddleware, upload.single("file"), TopicGenerationController.addCourse);
-router.post("/generateTopics", TopicGenerationController.topicGeneration);
-
-// Quizes
-router.get('/getQuizByUser', AuthMiddleware, QuizController.getQuizByUser)
-router.post("/generateQuiz", AuthMiddleware ,TopicGenerationController.QuizGeneration )
-router.get("/getQuiz", AuthMiddleware ,generateQuiz.getQuiz );
 router.post("/sendTopics", AuthMiddleware, QuizController.sendTopics);
 
 export default router;

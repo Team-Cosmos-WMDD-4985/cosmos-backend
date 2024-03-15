@@ -35,3 +35,17 @@ export const sendTopics = async (req, res) => {
     res.status(500).send({ error: 'Failed to generate quiz' });
   }
 };
+
+
+export const getQuizByUser = async (req, res, next) => {
+  try {
+
+    const quizes = await Quiz.find({ userId: req.user._id })
+    return res.json({
+      success: true,
+      data: quizes
+    })
+  } catch(err){
+    next(err)
+  }
+}

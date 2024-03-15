@@ -32,7 +32,9 @@ const makeScheduleObject = (data) => {
             finalData.push(obj);
         }
 
+    
     }
+    console.log(" this is the finalData: " , finalData)
     return finalData;
     
 }
@@ -165,7 +167,10 @@ export const addCourse = async (req, res, next) => {
         console.log(topics);
 
         const schedule = await generateSchedule(JSON.stringify(topics), weeks);
+        console.log (schedule);
         const finalScheduleFormat = makeScheduleObject( JSON.parse(schedule));
+        // const finalScheduleFormat = makeScheduleObject(schedule);
+
         const vectoreStoreKey = await AwsService.putToS3(serializedData, true);
 
         const courseData = await new CourseM({

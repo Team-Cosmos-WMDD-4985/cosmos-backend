@@ -5,9 +5,8 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY 
 });
 
-const quizList = [];
 
-async function generateQuizQuestion(topics, courseId, name, type, difficulty, numQuestions) {
+async function generateQuizQuestion(topics, courseId, name, type, difficulty, numQuestions, userId) {
   console.log("Received topics:", topics);
   console.log("Received topics:", courseId);
   try {
@@ -34,14 +33,14 @@ async function generateQuizQuestion(topics, courseId, name, type, difficulty, nu
     const generatedQuiz = JSON.parse(generatedText);
 
     generatedQuiz.courseId = courseId
-
+    generatedQuiz.quizName = name
+    generatedQuiz.userId = userId;
     console.log(generatedQuiz);
 
     const quiz = new Quiz(generatedQuiz);
-    await quiz.save();
+    const newQuiz = await quiz.save();
 
-    quizList.push(completion.choices[0]);
-    return quizList;
+    return newQuiz;
   } catch (error) {
     console.error("Error generating quiz question:", error);
     throw error;

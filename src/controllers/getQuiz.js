@@ -18,13 +18,18 @@ export const getQuiz = async (req, res) => {
 };
 
 export const sendTopics = async (req, res) => {
+  const userId = req.user._id;
   const { courseId, topics, name, type, difficulty, numQuestions } = req.body;
  console.log(courseId, topics, name, type, difficulty, numQuestions)
 
   try {
     const topicsString = topics.join(", ");
-    const quizTopic = await generateQuizQuestion(topicsString, courseId, name, type, difficulty, numQuestions)
+    const newQuiz = await generateQuizQuestion(topicsString, courseId, name, type, difficulty, numQuestions, userId)
     console.log(topicsString)
+    return res.json({
+      success: true,
+      data: newQuiz
+    })
   } catch(err){
     console.error("Error in sendTopics:", err);
     res.status(500).send({ error: 'Failed to generate quiz' });

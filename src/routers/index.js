@@ -27,7 +27,7 @@ router.post(
 );
 router.post("/generateTopics", TopicGenerationController.topicGeneration);
 router.post("/generateQuiz", TopicGenerationController.QuizGeneration )
-router.get("/getQuiz", generateQuiz.getQuiz )
+router.get("/getQuiz/:courseId", generateQuiz.getQuiz )
 router.use("/auth" ,authRoute);
 
 router.post("/sendTopics", AuthMiddleware, QuizController.sendTopics);

@@ -4,6 +4,7 @@ import Quiz from '../models/Quiz.js';
 
 export const getQuiz = async (req, res) => {
     const courseId = req.params.courseId;
+    // const courseId = "65ea4f184952e0727466856d";
     try {
         const quiz = await Quiz.find({ courseId: courseId });
         if (!quiz) return res.status(404).json('No quizzes found');
@@ -14,3 +15,7 @@ export const getQuiz = async (req, res) => {
         res.status(500).json({ message: 'An error occurred while retrieving the quiz.' });
     }
 };
+
+// export const getQuizId = async (req, res) => {
+   
+// };

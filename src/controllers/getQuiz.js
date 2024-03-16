@@ -49,3 +49,21 @@ export const getQuizByUser = async (req, res, next) => {
     next(err)
   }
 }
+
+export const getQuizById = async (req, res, next) => {
+  try {
+    const quizId = req.query.courseId;
+    const quizData = await Quiz.findById(quizId);
+
+    if(!quizData) {
+      throw new Error("No quiz found");
+    }
+
+    return res.json ({
+      success: true,
+      quiz: quizData
+    })
+  } catch (err) {
+    next()
+  }
+}

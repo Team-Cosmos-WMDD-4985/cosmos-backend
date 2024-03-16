@@ -36,5 +36,6 @@ router.get('/getQuizByUser', AuthMiddleware, QuizController.getQuizByUser)
 router.post("/generateQuiz", AuthMiddleware ,TopicGenerationController.QuizGeneration )
 router.get("/getQuiz", AuthMiddleware ,generateQuiz.getQuiz );
 router.post("/sendTopics", AuthMiddleware, QuizController.sendTopics);
+router.get("/quizById", AuthMiddleware, QuizController.getQuizById)
 
 export default router;

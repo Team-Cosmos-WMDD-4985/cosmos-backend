@@ -188,7 +188,9 @@ export const addCourse = async (req, res, next) => {
         multer.deleteFile(path);
         return res.json({
             sucess: true,
-            data: finalScheduleFormat
+            data: finalScheduleFormat,
+            courseId: courseData._id,
+            courseData
         })
 
 
@@ -203,8 +205,8 @@ export const updateCouse = async (req, res, next) => {
 
         const courseId = req.body.couseId;
 
-        const updatedData = await CourseM.findByIdAndUpdate(courseId, {...req.body})
-
+        const updatedData = await CourseM.findOneAndUpdate({ _id: req.body.finalCourseData._id }, {schedule: req.body.finalCourseData.schedule});
+        console.log(updatedData)
         return res.json({
             updatedData
         })

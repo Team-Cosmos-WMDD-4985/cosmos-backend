@@ -10,6 +10,7 @@ import multer from "../services/multer.js";
 import JoiServices from "../services/JoiServices.js";
 import * as OpenAI2 from "openai";
 import { generateSchedule } from "./../services/openai-test.js";
+import mongoose from "mongoose";
 
 const openai2 = new OpenAI2.default({ apiKey: process.env.OPENAI_API_KEY, });
 
@@ -188,7 +189,9 @@ export const addCourse = async (req, res, next) => {
         multer.deleteFile(path);
         return res.json({
             sucess: true,
-            data: finalScheduleFormat
+            data: finalScheduleFormat,
+            courseId: courseData._id,
+            courseData
         })
 
 
@@ -202,9 +205,13 @@ export const updateCouse = async (req, res, next) => {
     try {
 
         const courseId = req.body.couseId;
+        console.log(req.body.courseId);
+        console.log(req.body.finalCourseData._id);
+        
+        // delete  req.body.finalCourseData._id
 
-        const updatedData = await CourseM.findByIdAndUpdate(courseId, {...req.body})
-
+        const updatedData = await CourseM.findOneAndUpdate({ _id: req.body.finalCourseData._id }, {schedule: req.body.finalCourseData.schedule});
+        console.log(updatedData)
         return res.json({
             updatedData
         })

@@ -38,5 +38,7 @@ router.post("/generateQuiz", AuthMiddleware ,TopicGenerationController.QuizGener
 router.get("/getQuiz", AuthMiddleware ,generateQuiz.getQuiz );
 router.post("/sendTopics", AuthMiddleware, QuizController.sendTopics);
 router.get("/quizById", AuthMiddleware, QuizController.getQuizById)
+router.post("/regenerateQuiz/:quizId/:courseId", AuthMiddleware, QuizController.regenerateQuestion);
+router.delete("/deleteQuiz/:quizId", AuthMiddleware, QuizController.deleteQuiz);
 
 export default router;

@@ -21,7 +21,7 @@ app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-// app.use(bodyParser.json());
+app.use(bodyParser.json());
 // app.use(bodyParser.urlencoded({
 //     extended: true
 // }));
@@ -42,8 +42,7 @@ app.use ((err, req, res, next) => {
         err : err
     });
 })
-app.use(bodyParser.json());
-app.use(authRoute)
+// app.use(authRoute)
 app.get('/',requireToken, function (req, res) {
     res.send(req.user)
   });

@@ -8,10 +8,18 @@ const quizSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
+    topics: [String],
     courseId: { type: Schema.Types.ObjectId, ref: "Course" },
     quizName: { type: String, required: true },
     totalQuestion: {
       type: Number,
+    },
+
+    difficulty: {
+      type: String
+    },
+    type : {
+      type: String
     },
     questions: [ 
       {

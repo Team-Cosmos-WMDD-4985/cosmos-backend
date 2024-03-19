@@ -8,7 +8,8 @@ const openai = new OpenAI({
 
 async function generateQuizQuestion(topics, courseId, name, type, difficulty, numQuestions, userId) {
   console.log("Received topics:", topics);
-  console.log("Received topics:", courseId);
+  console.log("Received courseId:", courseId);
+  console.log("Received type:", type);
   try {
     const prompt = `Generate a ${numQuestions} question quiz about ${topics} in JSON format for a basic programming course. a name that is ${name}, a total number of questions, and an array of questions. Each question must include the question text, a type ${type}(e.g., multiple-choice, true/false), a set of options where applicable (each with a value and a boolean indicating if it's the correct answer), and the correct answer text. The quiz should cover fundamental concepts like ${topics}. Ensure the structure matches the following mongoose schema:
 
@@ -22,7 +23,10 @@ async function generateQuizQuestion(topics, courseId, name, type, difficulty, nu
     optionValue (string)
     isTrue (boolean)
     answer (string, required)
-    Please format the output in JSON.`;
+    Please format the output in JSON.
+    
+    dont give A,B,C,D option just give text of options
+    `;
 
     const completion = await openai.chat.completions.create({
       messages: [{ role: "system", content: prompt }],
@@ -31,21 +35,17 @@ async function generateQuizQuestion(topics, courseId, name, type, difficulty, nu
 
     const generatedText = completion.choices[0].message.content;
     const generatedQuiz = JSON.parse(generatedText);
+    console.log(generatedText)
+    generatedQuiz.courseId = courseId;
 
-    generatedQuiz.courseId = courseId
-    generatedQuiz.quizName = name
-    generatedQuiz.userId = userId;
-    console.log(generatedQuiz);
-
-    const quiz = new Quiz(generatedQuiz);
-    const newQuiz = await quiz.save();
-
-    return newQuiz;
+    return generatedQuiz;
   } catch (error) {
     console.error("Error generating quiz question:", error);
     throw error;
   }
 }
+
+
 
 
 const generateSchedule = async (topics, weeks) => {

@@ -26,9 +26,9 @@ app.use(bodyParser.json());
 //     extended: true
 // }));
 app.use((req, res, next) => {
-    console.log("params" , req.params);
-    console.log("body" , req.body);
-    console.log("URL: ", req.originalUrl);
+    console.log("Server.js params" , req.params);
+    console.log("Server.js  body" , req.body);
+    console.log("Server.js  URL: ", req.originalUrl);
     next();
 });
 app.use(Router);

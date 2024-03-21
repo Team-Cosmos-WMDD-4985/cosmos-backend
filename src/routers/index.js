@@ -28,6 +28,7 @@ router.post("/addCourse", AuthMiddleware, upload.single("file"), TopicGeneration
 router.post("/generateTopics", TopicGenerationController.topicGeneration);
 // router.post("/generateQuiz", TopicGenerationController.QuizGeneration )
 router.post("/updateSchedule", TopicGenerationController.updateCouse);
+router.get('/courses/:courseId', AuthMiddleware, TopicGenerationController.getCourseById);
 
 router.use("/auth" ,authRoute);
 

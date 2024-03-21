@@ -4,3 +4,6 @@ npm install jsonwebtoken
 npm install --global windows-build-tools
 npm install -g node-gyp
 
+
+ngrok http 4000
+nodemon devStart

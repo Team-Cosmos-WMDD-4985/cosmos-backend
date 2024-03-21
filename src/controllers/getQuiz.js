@@ -29,7 +29,6 @@ export const sendTopics = async (req, res) => {
     console.log(`this is type ${type}`);
     const quizData = await generateQuizQuestion(topicsString, courseId, name, type, difficulty, numQuestions, userId);
 
-    
     quizData.courseId = courseId
     quizData.quizName = name
     quizData.userId = userId;

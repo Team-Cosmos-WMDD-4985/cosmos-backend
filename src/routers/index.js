@@ -39,6 +39,8 @@ router.post("/generateQuiz", AuthMiddleware ,TopicGenerationController.QuizGener
 router.get("/getQuiz", AuthMiddleware ,generateQuiz.getQuiz );
 router.post("/sendTopics", AuthMiddleware, QuizController.sendTopics);
 router.get("/quizById", AuthMiddleware, QuizController.getQuizById)
+router.post("/addQuestion/:quizID", AuthMiddleware, QuizController.addQuestion);
+router.post("/getQuizForUpdate/:quizId", AuthMiddleware, QuizController.getQuizForUpdate);
 router.post("/regenerateQuiz/:quizId/:courseId", AuthMiddleware, QuizController.regenerateQuestion);
 router.delete("/deleteQuiz/:quizId", AuthMiddleware, QuizController.deleteQuiz);
 

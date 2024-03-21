@@ -58,7 +58,7 @@ export default {
                     return res.status(422).send({ error: 'password not match' });
                 }
             });
-    
+            
         } catch (error) {
             console.error(error);
             res.status(500).send({ error: 'Internal Server Error' });

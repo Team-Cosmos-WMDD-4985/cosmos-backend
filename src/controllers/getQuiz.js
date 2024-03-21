@@ -165,3 +165,54 @@ export const deleteQuiz = async (req, res, next) => {
     next(err)
   }
 }
+
+
+
+
+
+export const addQuestion = async (req, res) => {
+  const quizID = req.params.quizID;
+  const { question, options, answer } = req.body
+  console.log(quizID);
+
+  try {
+    const quiz = await Quiz.findById(quizID);
+    console.log(quiz);
+    if (!quiz) {
+      return res.status(404).json({ message: "Quiz not found" });
+    }
+    
+     const newQuestion = {
+      question: question,
+      options:  options.map((option) => ({
+        optionValue: option,
+      })),
+      answer: answer
+    }
+
+    quiz.questions.push(newQuestion);
+    console.log(quiz);
+    await quiz.save();
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
+
+export const getQuizForUpdate = async (req, res) => {
+  const quizID = req.params.quizId;
+  try {
+      const quiz = await Quiz.findById(quizID);
+      if (!quiz) {
+          return res.status(404).json({ message: "The requested resource does not exist." });
+      }
+      return res.status(200).json(quiz);
+  } catch (err) {
+      return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+  

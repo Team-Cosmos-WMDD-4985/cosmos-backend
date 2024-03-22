@@ -69,6 +69,8 @@ export const regenerateQuestion = async (req, res, next) => {
       throw new Error("No quiz found");
     }
 
+    console.log(quizDetails.totalQuestion)
+
     const topicsString = quizDetails.topics.join(", ");
 
     const quizData = await generateQuizQuestion(
@@ -97,8 +99,9 @@ export const regenerateQuestion = async (req, res, next) => {
     quizDetails.type = quizData.type;
     quizDetails.difficulty = quizData.difficulty;
     quizDetails.questions = quizData.questions;
+    quizDetails.totalQuestion = quizDetails.totalQuestion;
 
-    // console.log(quizDetails.questions,"this is the questions")
+    
     
     const updatedQuiz = await quizDetails.save();
 

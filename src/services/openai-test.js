@@ -11,22 +11,44 @@ async function generateQuizQuestion(topics, courseId, name, type, difficulty, nu
   console.log("Received courseId:", courseId);
   console.log("Received type:", type);
   try {
-    const prompt = `Generate a ${numQuestions} question quiz about ${topics} in JSON format for a basic programming course. a name that is ${name}, a total number of questions, and an array of questions. Each question must include the question text, a type ${type}(e.g., multiple-choice, true/false), a set of options where applicable (each with a value and a boolean indicating if it's the correct answer), and the correct answer text. The quiz should cover fundamental concepts like ${topics}. Ensure the structure matches the following mongoose schema:
+    // const prompt = `Generate a ${numQuestions} question quiz about ${topics} in JSON format for a basic programming course. a name that is ${name}, a total number of questions, and an array of questions. Each question must include the question text, a type ${type}, a set of options where applicable (each with a value and a boolean indicating if it's the correct answer), and the correct answer text. The quiz should cover fundamental concepts like ${topics}. Ensure the structure matches the following mongoose schema:
 
     
-    quizName (string, required)
-    totalQuestion (number)
-    questions (array) with fields:
-    question (string, required)
-    questionType (string)
-    options (array) with fields:
+    // // quizName (string, required)
+    // // totalQuestion (number)
+    // // questions (array) with fields:
+    // // question (string, required)
+    // // questionType (string)
+    // // options (array) with fields:
+    // // optionValue (string)
+    // // isTrue (boolean)
+    // // answer (string, required)
+    // // Please format the output in JSON.
+    
+   
+  
+    // // `;
+
+    const prompt = `Generate a ${numQuestions} question quiz about ${topics} in JSON format for a basic programming course. The quiz name is "${name}". Include a total of ${numQuestions} questions, covering fundamental concepts like ${topics}. Each question must include the question text, a type ${type}, and options where applicable. If the question type is true/false, provide only true and false options for all ${numQuestions} questions. If the question type is multiple choice, each question should have four options. Ensure the structure matches the following mongoose schema:
+
+quizName (string, required)
+totalQuestion (number)
+questions (array) with fields:
+  question (string, required)
+  questionType (string)
+  options (array) with fields:
     optionValue (string)
     isTrue (boolean)
-    answer (string, required)
-    Please format the output in JSON.
-    
-    dont give A,B,C,D option just give text of options
-    `;
+  answer (string, required)
+Please format the output in JSON.
+`;
+
+
+
+   
+
+
+
 
     const completion = await openai.chat.completions.create({
       messages: [{ role: "system", content: prompt }],

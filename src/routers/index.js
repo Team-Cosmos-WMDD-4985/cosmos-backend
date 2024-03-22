@@ -29,8 +29,7 @@ router.post("/generateTopics", TopicGenerationController.topicGeneration);
 // router.post("/generateQuiz", TopicGenerationController.QuizGeneration )
 router.post("/updateSchedule", TopicGenerationController.updateCouse);
 router.get('/courses/:courseId', AuthMiddleware, TopicGenerationController.getCourseById);
-
-router.use("/auth" ,authRoute);
+router.get("/chatai/:courseId", AuthMiddleware, TopicGenerationController.chatAI);
 
 // Quizes
 router.get("/getQuiz/:courseId", generateQuiz.getQuiz )

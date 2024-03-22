@@ -116,7 +116,7 @@ export const getCourseById = async (req, res, next) => {
         const course = await CourseM.findById(courseId);
 
         if (!course) {
-            return res.status(404).json({ message: "Course not found" });
+            return res.status(401).json({ message: "Course not found" });
         }
 
         res.json({ success: true, data: course });
@@ -238,4 +238,32 @@ export const QuizGeneration = async (req, res, next) => {
     return res.json({
         data
     })
+}
+
+export const chatAI = async (req, res, next) => {
+
+    try {
+
+        const courseId = req.params.courseId
+        const message = req.query.message;
+
+        const course = await CourseM.findById(courseId);
+        if (!course) throw new Error('Course not found');
+
+        const s3Id = course.vectorStoreS3Key;
+        
+        const serializedData = await AwsService.getSingleObject(s3Id, true);
+        const vectorStorage = new MemoryVectorStore(new OpenAIEmbeddings());
+        vectorStorage.memoryVectors = serializedData.memoryVectors;
+
+        const question = message;
+        const response = await VectorStoreService.retrieverQAChain(vectorStorage, question);
+
+        return res.json({
+            text: response.text
+        })
+
+    } catch (err) {
+        throw new Error(err)
+    }
 }

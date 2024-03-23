@@ -193,10 +193,13 @@ export const addQuestion = async (req, res) => {
       answer: answer
     }
 
+    quiz.totalQuestion = quiz.totalQuestion +1
     quiz.questions.push(newQuestion);
     console.log(quiz);
     await quiz.save();
-
+    return res.json({
+      quiz
+    })
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Internal server error" });

@@ -5,7 +5,6 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY 
 });
 
-
 async function generateQuizQuestion(topics, courseId, name, type, difficulty, numQuestions, userId) {
   console.log("Received topics:", topics);
   console.log("Received courseId:", courseId);
@@ -24,6 +23,10 @@ async function generateQuizQuestion(topics, courseId, name, type, difficulty, nu
     // // isTrue (boolean)
     // // answer (string, required)
     // // Please format the output in JSON.
+
+
+
+    // dont give me option A,B,C,D
     
    
   

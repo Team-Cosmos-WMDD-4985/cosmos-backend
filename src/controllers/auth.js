@@ -42,6 +42,7 @@ export default {
             return res.status(422).send({ error: 'Please fill out all the missing fields' });
         }
         const user = await User.findOne({ email: email });
+        
         if (!user) {
             return res.status(422).send({ error: 'invalid Credential' });
         }
@@ -50,7 +51,14 @@ export default {
                 if (result) {
                     console.log("password match")
                     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET)
-                    res.send({token})
+
+                    const userInfo = user.toJSON();
+                    delete userInfo.password;
+                    delete userInfo._id;
+                    res.json({
+                        token : token,
+                        user: user
+                    })
     
                 }
                 else{

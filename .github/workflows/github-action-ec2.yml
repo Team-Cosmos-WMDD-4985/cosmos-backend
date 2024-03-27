@@ -26,7 +26,11 @@ jobs:
       
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-          ssh -o StrictHostKeyChecking=no -i private_key ubuntu@${HOSTNAME} '
+          ssh -o StrictHostKeyChecking=no -i private_key ubuntu@${HOSTNAME}
+          echo "Running as user: $(whoami)"
+          echo "PATH: $PATH"
+          echo "Location of npm: $(which npm)"
+
 
           cd /home/ubuntu/cosmos-backend &&
           sudo apt update
@@ -34,6 +38,7 @@ jobs:
           git fetch --all &&
           git reset --hard origin/develop &&
           git pull origin develop &&
+          
           npm i &&
           pm2 stop server.js &&
           pm2 start server.js

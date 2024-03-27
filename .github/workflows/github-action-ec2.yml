@@ -3,7 +3,7 @@ name: Deploy Node.js Application to EC2
 on:
   push:
     branches:
-      - main  # Set to your default branch
+      - develop  # Set to your default branch
 
 jobs:
   deploy:
@@ -35,7 +35,8 @@ jobs:
           chmod 600 deploy_key
           ssh -o StrictHostKeyChecking=no -i deploy_key $USERNAME@$HOST << 'EOF'
             cd /home/ubuntu/cosmos-backend  # Change to the directory of your app
-            git pull origin master  # Or use rsync/scp to copy files from the runner to your EC2 instance
+            git checkout develop
+            git pull origin develop  # Or use rsync/scp to copy files from the runner to your EC2 instance
             npm install --production  # Install any new dependencies
             pm2 restart all  # Or any other command to restart your app
           EOF

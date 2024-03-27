@@ -1,0 +1,39 @@
+name: Deploy
+
+on:
+  push:
+    branches: [develop]
+
+jobs:
+  build-and-deploy:
+    name: Deploy to EC2
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout to runner
+        uses: actions/checkout@v2
+
+      - name: Define variables
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          REMOTE_HOST: ${{ secrets.HOST_DNS }}
+          REMOTE_USER: ${{ secrets.USERNAME }}
+          TARGET: ${{ secrets.TARGET_DIR }}
+          
+      - name: Executing remote ssh commands using ssh key
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_DNS }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+      
+      - name: Pull and run the project
+        run: |
+          cd /home/ubuntu/cosmos-backend &&
+          git checkout develop &&
+          git fetch --all &&
+          git  reset --hard origin/develop &&
+          sudo npm install &&
+          sudo pm2 stop ./server.js &&
+          sudo pm2 start ./server.js
+

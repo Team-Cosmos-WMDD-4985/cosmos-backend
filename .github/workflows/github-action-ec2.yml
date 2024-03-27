@@ -2,36 +2,32 @@ name: Deploy
 
 on:
   push:
-    branches: [develop]
+    branches: [ develop ]
 
 jobs:
-  build-and-deploy:
+  Deploy:
     name: Deploy to EC2
     runs-on: ubuntu-latest
-
+    
     steps:
-      - name: Checkout to runner
-        uses: actions/checkout@v2
-        
-      - name: Executing remote ssh commands using ssh key
+      - uses: actions/checkout@v2 
+      - name: Build & Deploy
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-          REMOTE_HOST: ${{ secrets.HOST_DNS }}
-          REMOTE_USER: ${{ secrets.USERNAME }}
-          TARGET: ${{ secrets.TARGET_DIR }}
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST_DNS }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.EC2_SSH_KEY }}
+            PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+            HOSTNAME: ${{secrets.HOST_DNS}}
+            USER_NAME: ${{secrets.USERNAME}}
       
-      - name: Pull and run the project
         run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
+
+          # Now we have got the access of EC2 and we will start the deploy .
           cd /home/ubuntu/cosmos-backend &&
           git checkout develop &&
           git fetch --all &&
-          git  reset --hard origin/develop &&
-          sudo npm install &&
-          sudo pm2 stop ./server.js &&
-          sudo pm2 start ./server.js
-
+          git reset --hard origin/develop &&
+          git pull origin develop &&
+          sudo npm i &&
+          sudo pm2 stop .server.js &&
+          sudo pm2 start .server.js
+          '

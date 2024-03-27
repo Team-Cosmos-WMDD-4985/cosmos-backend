@@ -12,15 +12,13 @@ jobs:
     steps:
       - name: Checkout to runner
         uses: actions/checkout@v2
-
-      - name: Define variables
+        
+      - name: Executing remote ssh commands using ssh key
         env:
           SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
           REMOTE_HOST: ${{ secrets.HOST_DNS }}
           REMOTE_USER: ${{ secrets.USERNAME }}
           TARGET: ${{ secrets.TARGET_DIR }}
-          
-      - name: Executing remote ssh commands using ssh key
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST_DNS }}

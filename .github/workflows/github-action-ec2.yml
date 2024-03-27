@@ -28,6 +28,6 @@ jobs:
           git reset --hard origin/develop &&
           git pull origin develop &&
           sudo npm i &&
-          sudo pm2 stop .server.js &&
-          sudo pm2 start .server.js
+          sudo pm2 stop server.js &&
+          sudo pm2 start server.js
           '

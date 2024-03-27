@@ -30,7 +30,6 @@ jobs:
           echo "Running as user: $(whoami)"
           echo "PATH: $PATH"
           echo "Location of npm: $(which npm)"
-          '
 
 
           cd /home/ubuntu/cosmos-backend &&

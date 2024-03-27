@@ -1,45 +1,42 @@
-name: Deploy
+name: Deploy Node.js Application to EC2
 
 on:
   push:
-    branches: [ develop ]
+    branches:
+      - main  # Set to your default branch
 
 jobs:
-  Deploy:
+  deploy:
     name: Deploy to EC2
     runs-on: ubuntu-latest
-    
+
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-      - uses: actions/checkout@v2 
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
         with:
-          node-version: '20.x'
+          node-version: '16'  # Set to your Node.js version
 
-      - name: Build & Deploy
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build  # Replace or remove this line if you don't have a build step
+
+      - name: Deploy to EC2
         env:
-            PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-            HOSTNAME: ${{secrets.HOST_DNS}}
-            USER_NAME: ${{secrets.USERNAME}}
-      
+          SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+          HOST: ${{ secrets.HOST_DNS }}
+          USERNAME: ${{ secrets.USERNAME }}
         run: |
-          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-          ssh -o StrictHostKeyChecking=no -i private_key ubuntu@${HOSTNAME} '
-          echo "Running as user: $(whoami)"
-          echo "PATH: $PATH"
-          echo "Location of npm: $(which npm)"
-
-
-          cd /home/ubuntu/cosmos-backend &&
-          sudo apt update
-          git checkout develop &&
-          git fetch --all &&
-          git reset --hard origin/develop &&
-          git pull origin develop &&
-          
-          npm i &&
-          pm2 stop server.js &&
-          pm2 start server.js
-          '
+          echo "$SSH_KEY" > deploy_key
+          chmod 600 deploy_key
+          ssh -o StrictHostKeyChecking=no -i deploy_key $USERNAME@$HOST << 'EOF'
+            cd /home/ubuntu/cosmos-backend  # Change to the directory of your app
+            git pull origin master  # Or use rsync/scp to copy files from the runner to your EC2 instance
+            npm install --production  # Install any new dependencies
+            pm2 restart all  # Or any other command to restart your app
+          EOF
+          rm -f deploy_key

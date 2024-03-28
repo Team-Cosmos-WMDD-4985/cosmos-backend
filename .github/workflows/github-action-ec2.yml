@@ -22,9 +22,6 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Build
-        run: npm run build  # Replace or remove this line if you don't have a build step
-
       - name: Deploy to EC2
         env:
           SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
@@ -33,6 +30,7 @@ jobs:
         run: |
           echo "$SSH_KEY" > deploy_key
           chmod 600 deploy_key
+          echo "$USERNAME@$HOST"
           ssh -o StrictHostKeyChecking=no -i deploy_key $USERNAME@$HOST << 'EOF'
             cd /home/ubuntu/cosmos-backend  # Change to the directory of your app
             git checkout develop

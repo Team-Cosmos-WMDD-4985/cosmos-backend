@@ -34,7 +34,8 @@ jobs:
           git checkout actions
           git pull origin actions  
           npm install --production  
-          pm2 restart all  
+          pm2 stop server.js
+          pm2 start server.js  
           exit
           EOF
           rm -f deploy_key

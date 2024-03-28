@@ -3,7 +3,7 @@ name: Deploy Node.js Application to EC2
 on:
   push:
     branches:
-      - develop  # Set to your default branch
+      - actions  # Set to your default branch
 
 jobs:
   deploy:
@@ -17,10 +17,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '20'  # Set to your Node.js version
-
-      - name: Install Dependencies
-        run: npm install
+          node-version: '14'  # Set to a valid Node.js version
 
       - name: Deploy to EC2
         env:
@@ -30,12 +27,12 @@ jobs:
         run: |
           echo "$SSH_KEY" > deploy_key
           chmod 600 deploy_key
-          echo "$USERNAME@$HOST"
-          ssh -o StrictHostKeyChecking=no -i deploy_key $USERNAME@$HOST
-            cd /home/ubuntu/cosmos-backend  # Change to the directory of your app
-            git checkout develop
-            git pull origin develop  # Or use rsync/scp to copy files from the runner to your EC2 instance
-            npm install --production  # Install any new dependencies
-            pm2 restart all  # Or any other command to restart your app
+          ssh -o StrictHostKeyChecking=no -i deploy_key $USERNAME@$HOST << EOF
+            cd /home/ubuntu/cosmos-backend/
+            git checkout actions
+            git pull origin actions  
+            npm install --production  
+            pm2 restart all  
+            exit
           EOF
           rm -f deploy_key

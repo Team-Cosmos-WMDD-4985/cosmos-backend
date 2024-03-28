@@ -28,11 +28,13 @@ jobs:
           echo "$SSH_KEY" > deploy_key
           chmod 600 deploy_key
           ssh -o StrictHostKeyChecking=no -i deploy_key $USERNAME@$HOST << EOF
-            cd /home/ubuntu/cosmos-backend/
-            git checkout actions
-            git pull origin actions  
-            npm install --production  
-            pm2 restart all  
-            exit
+          cd /home/ubuntu/cosmos-backend/
+          export NVM_DIR=~/.nvm
+          source ~/.nvm/nvm.sh  
+          git checkout actions
+          git pull origin actions  
+          npm install --production  
+          pm2 restart all  
+          exit
           EOF
           rm -f deploy_key

@@ -31,7 +31,7 @@ jobs:
           echo "$SSH_KEY" > deploy_key
           chmod 600 deploy_key
           echo "$USERNAME@$HOST"
-          ssh -o StrictHostKeyChecking=no -i deploy_key $USERNAME@$HOST << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i deploy_key $USERNAME@$HOST
             cd /home/ubuntu/cosmos-backend  # Change to the directory of your app
             git checkout develop
             git pull origin develop  # Or use rsync/scp to copy files from the runner to your EC2 instance

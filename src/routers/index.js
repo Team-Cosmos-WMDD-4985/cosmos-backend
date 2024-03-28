@@ -13,7 +13,7 @@ const upload = multer({ storage: multerConfig.multerConfig() });
 
 router.get("/test", (req, res) => {
   res.json({
-    message: "This is a test route",
+    message: "This is a test route for cicd testing",
   });
 });
 

@@ -32,7 +32,7 @@ async function generateQuizQuestion(topics, courseId, name, type, difficulty, nu
   
     // // `;
 
-    const prompt = `Generate a ${numQuestions} question quiz about ${topics} in JSON format for a basic programming course. The quiz name is "${name}". Include a total of ${numQuestions} questions, covering fundamental concepts like ${topics}. Each question must include the question text, a type ${type}, and options where applicable. If the question type is true/false, provide only true and false options for all ${numQuestions} questions. If the question type is multiple choice, each question should have four options. Ensure the structure matches the following mongoose schema:
+    const prompt = `Generate a ${numQuestions} question quiz about ${topics} in JSON format for a basic programming course. The quiz name is "${name}". Include a total of ${numQuestions} questions, covering fundamental concepts like ${topics}. Each question must include the question text, a type MultipleChoice, and options where applicable. If the question type is true/false, provide only true and false options for all ${numQuestions} questions. If the question type is multiple choice, each question should have four options. Ensure the structure matches the following mongoose schema:
 
 quizName (string, required)
 totalQuestion (number)
@@ -44,6 +44,8 @@ questions (array) with fields:
     isTrue (boolean)
   answer (string, required)
 Please format the output in JSON.
+
+Dont give me A, B, C etc.. I want to provide my own custom labels for options. all question should have 4 options dont give any true and false questions
 `;
 
 

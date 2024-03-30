@@ -2,7 +2,7 @@ import Quiz from "../models/Quiz.js";
 import authTokenRequired from "../middleware/authTokenRequired.js";
 import generateQuizQuestion from "../services/openai-test.js";
 
-export const getQuiz = async (req, res) => {
+export const getQuiz = async (req, res, next) => {
   const courseId = req.params.courseId;
 
   try {
@@ -17,7 +17,7 @@ export const getQuiz = async (req, res) => {
   }
 };
 
-export const sendTopics = async (req, res) => {
+export const sendTopics = async (req, res, next) => {
   const userId = req.user._id;
   const { courseId, topics, name, type, difficulty, numQuestions } = req.body;
   console.log(courseId, topics, name, type, difficulty, numQuestions);
@@ -44,7 +44,7 @@ export const sendTopics = async (req, res) => {
     })
   } catch (err) {
     console.error("Error in sendTopics:", err);
-    // next(err);
+    next(err);
   }
 };
 

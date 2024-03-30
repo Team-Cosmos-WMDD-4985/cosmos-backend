@@ -45,7 +45,7 @@ questions (array) with fields:
   answer (string, required)
 Please format the output in JSON.
 
-Dont give me A, B, C etc.. I want to provide my own custom labels for options. all question should have 4 options dont give any true and false questions
+Dont give me A, B, C, D etc.. always I want to provide my own custom labels for options. all question should have 4 options dont give any true and false questions
 `;
 
 

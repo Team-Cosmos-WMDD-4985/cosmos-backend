@@ -13,7 +13,6 @@ import authRoute from './src/routers/authRoutes.js';
 
 const app = express();
 
-import requireToken from './Middelware/authTokenRequired.js'
 // import awsService from './src/services/aws.service.js';
 // await awsService.getObject();
 
@@ -42,10 +41,6 @@ app.use ((err, req, res, next) => {
         err : err
     });
 })
-// app.use(authRoute)
-app.get('/',requireToken, function (req, res) {
-    res.send(req.user)
-  });
 
 
 const port = process.env.PORT || 4000;

@@ -11,6 +11,10 @@ import * as generateQuiz from "../controllers/generateQuiz.js"
 const router = express.Router();
 const upload = multer({ storage: multerConfig.multerConfig() });
 
+router.get('/', AuthMiddleware, function (req, res) {
+  res.send(req.user)
+});
+
 router.get("/test", (req, res) => {
   res.json({
     message: "This is a test route for cicd testing",

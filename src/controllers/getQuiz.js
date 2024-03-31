@@ -138,7 +138,8 @@ export const getQuizByUser = async (req, res, next) => {
 
 export const getQuizById = async (req, res, next) => {
   try {
-    const quizId = req.query.courseId;
+    
+    const quizId = req.query.quizId;
     const quizData = await Quiz.findById(quizId);
 
     if(!quizData) {
